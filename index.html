@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sürpriz!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Segoe+UI&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
@@ -12,63 +13,247 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            /* Lacivert tonlama ve arka plan görseli */
-            /* BURAYA KENDİ FOTOĞRAF LİNKİNİ YAPIŞTIR */
-            background: linear-gradient(to bottom, rgba(10, 25, 60, 0.8), rgba(5, 10, 30, 0.9)), url('https://images.unsplash.com/photo-1531804466715-60239456710e?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-            background-size: cover;
-            background-position: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #fff; /* Yazı rengi beyaz */
+            /* Arka planı biraz daha romantik yapalım */
+            background: linear-gradient(135deg, #2c3e50 0%, #bdc3c7 100%);
+            font-family: 'Segoe UI', sans-serif;
+            overflow: hidden; /* Taşmaları gizle */
+        }
+
+        /* ZARF ALANI */
+        .envelope-wrapper {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .envelope {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background: #f7edd5; /* Kağıt rengi */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            z-index: 2;
+        }
+
+        /* Zarfın Kapakları */
+        .envelope::before { /* Alt üçgen kapak */
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-bottom: 100px solid #e6dabf;
+            z-index: 3;
+        }
+
+        .envelope::after { /* Yan kapaklar */
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-top: 100px solid transparent;
+            border-bottom: 100px solid transparent;
+            border-left: 150px solid #eee0c9;
+            z-index: 2;
+        }
+        
+        /* Üst Açılır Kapak */
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 110px solid #f7edd5;
+            transform-origin: top;
+            transition: transform 0.8s ease-in-out;
+            z-index: 4;
+        }
+
+        /* Kalp Mühür */
+        .seal {
+            position: absolute;
+            top: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 40px;
+            color: #c0392b; /* Kırmızı mühür rengi */
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+            z-index: 5;
+            transition: opacity 0.5s;
+        }
+
+        /* KART (FOTOĞRAF VE NOT) */
+        .card-container {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 260px;
+            height: 350px;
+            perspective: 1000px; /* 3D efekti için */
+            z-index: 1; /* Zarfın içinde başlar */
+            transition: top 1s ease-in-out 0.8s; /* Zarf açıldıktan sonra çıkması için gecikme */
+        }
+
+        .card {
+            position: relative;
+            width: 100%;
+            height: 100%;
             text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
-        .container {
-            /* Kutu için koyu lacivert, yarı saydam arka plan */
-            background: rgba(30, 50, 100, 0.5);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 50, 0.5);
-            backdrop-filter: blur(8px); /* Bulanıklık efekti artırıldı */
-            border: 1px solid rgba(100, 150, 255, 0.2);
-            animation: fadeIn 2s ease-in;
+
+        /* Kart dışarı çıktığında üzerine gelince dönsün */
+        .card-container.pulled:hover .card {
+            transform: rotateY(180deg);
         }
-        h1 {
-            font-size: 3.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden; /* Arka yüzü gizle */
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
-        p {
-            font-size: 1.5rem;
-            margin-top: 0;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+
+        /* Kartın Ön Yüzü (Fotoğraf) */
+        .card-front {
+            background-color: #fff;
+            color: black;
         }
-        .heart {
-            font-size: 5rem;
-            color: #ff4b4b; /* Kalp rengi kırmızı kaldı, lacivertte güzel durur */
-            animation: heartbeat 1.2s infinite;
-            margin-top: 20px;
-            display: block;
-            text-shadow: 0 0 10px rgba(255, 75, 75, 0.5);
+        .card-front img {
+            width: 90%;
+            height: 80%;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 3px solid #eee;
         }
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            14% { transform: scale(1.3); }
-            28% { transform: scale(1); }
-            42% { transform: scale(1.3); }
-            70% { transform: scale(1); }
+        .card-front h2 {
+            margin: 10px 0 5px 0;
+            font-family: 'Dancing Script', cursive;
+            color: #c0392b;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        /* Kartın Arka Yüzü (Not) */
+        .card-back {
+            background: linear-gradient(to bottom, rgba(10, 25, 60, 0.9), rgba(5, 10, 30, 0.95)), url('Yaso.jpg');
+            background-size: cover;
+            color: #FFD700; /* Altın rengi yazı */
+            transform: rotateY(180deg); /* Başlangıçta ters duracak */
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .card-back p {
+            font-size: 1.3rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-shadow: 0 0 5px #FFD700;
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* Tıklanınca Olacaklar (JavaScript Ekleyecek) */
+        .envelope.open .flap {
+            transform: rotateX(180deg); /* Kapak açılır */
+            z-index: 1;
+        }
+        .envelope.open .seal {
+            opacity: 0; /* Mühür kaybolur */
+        }
+        .card-container.pulled {
+            top: -250px; /* Kart yukarı çıkar */
+            z-index: 6; /* Zarfın önüne geçer */
+        }
+
+        .click-hint {
+            position: absolute;
+            bottom: -40px;
+            width: 100%;
+            text-align: center;
+            color: #fff;
+            font-size: 1.2rem;
+            animation: bounce 2s infinite;
+            opacity: 1;
+            transition: opacity 0.5s;
+        }
+        .click-hint.hidden {
+            opacity: 0;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>HALİL ❤️ YASO</h1>
-        <p>Seni Çok Seviyorum!</p>
-        <span class="heart">❤️</span>
+    <audio id="bgMusic" loop>
+        <source src="muzik.mp3" type="audio/mpeg">
+        Tarayıcınız bu ses dosyasını desteklemiyor.
+    </audio>
+
+    <div class="envelope-wrapper" onclick="openSurprise()">
+        <div class="envelope" id="envelope">
+            <div class="flap"></div>
+            <div class="seal">❤️</div>
+        </div>
+
+        <div class="card-container" id="cardContainer">
+            <div class="card">
+                <div class="card-front">
+                    <img src="Yaso.jpg" alt="Biz">
+                    <h2>Halil & Yaso</h2>
+                </div>
+                <div class="card-back">
+                    <p>"Seninle geçen her an, hayatımın en güzel hediyesi. İyi ki varsın, iyi ki benimlesin tencere kapağım."</p>
+                    <span style="font-size: 3rem; display:block; margin-top: 10px;">❤️</span>
+                </div>
+            </div>
+        </div>
+        <p class="click-hint" id="hint">Zarfa Tıkla Birtanem</p>
     </div>
+
+
+    <script>
+        // Sürprizi başlatan fonksiyon
+        function openSurprise() {
+            const envelope = document.getElementById('envelope');
+            const cardContainer = document.getElementById('cardContainer');
+            const music = document.getElementById('bgMusic');
+            const hint = document.getElementById('hint');
+
+            // Eğer zaten açılmışsa tekrar tetikleme
+            if (envelope.classList.contains('open')) return;
+
+            // Müziği başlat (Sesi biraz kısık başlatalım, %60 iyidir)
+            music.volume = 0.6;
+            music.play();
+
+            // Zarfi aç ve ipucunu gizle
+            envelope.classList.add('open');
+            hint.classList.add('hidden');
+
+            // Zarf açıldıktan 0.8 saniye sonra kartı yukarı çek
+            // (Bu süre CSS'deki transition süresiyle uyumlu)
+            setTimeout(() => {
+                cardContainer.classList.add('pulled');
+            }, 800);
+        }
+    </script>
 
 </body>
 </html>
