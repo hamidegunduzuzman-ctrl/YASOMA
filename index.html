@@ -13,19 +13,43 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            /* YENİ ARKA PLAN: resim1.jpg */
-            /* Üzerine koyu lacivert bir filtre attık ki zarf net görünsün */
-            background: linear-gradient(rgba(10, 25, 60, 0.8), rgba(10, 25, 60, 0.8)), url('resim1.jpg');
+            /* Arka plan: yaso.jpg */
+            background: linear-gradient(rgba(10, 25, 60, 0.7), rgba(10, 25, 60, 0.8)), url('yaso.jpg');
             background-size: cover;
             background-position: center;
             font-family: 'Segoe UI', sans-serif;
             overflow: hidden;
         }
 
+        /* MÜZİK KONTROL BUTONU (GARANTİ İÇİN) */
+        .music-control {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 10px 15px;
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .music-control:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.05);
+        }
+
         /* ZARF ALANI */
         .envelope-wrapper {
             position: relative;
             cursor: pointer;
+            transition: transform 0.5s;
         }
 
         .envelope {
@@ -33,12 +57,11 @@
             width: 300px;
             height: 200px;
             background: #f7edd5;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5); /* Gölgeyi belirginleştirdik */
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
             z-index: 2;
         }
 
-        /* Zarfın Kapakları */
-        .envelope::before { /* Alt üçgen kapak */
+        .envelope::before { 
             content: '';
             position: absolute;
             bottom: 0;
@@ -51,7 +74,7 @@
             z-index: 3;
         }
 
-        .envelope::after { /* Yan kapaklar */
+        .envelope::after { 
             content: '';
             position: absolute;
             top: 0;
@@ -64,7 +87,6 @@
             z-index: 2;
         }
         
-        /* Üst Açılır Kapak */
         .flap {
             position: absolute;
             top: 0;
@@ -79,7 +101,6 @@
             z-index: 4;
         }
 
-        /* Kalp Mühür */
         .seal {
             position: absolute;
             top: 90px;
@@ -92,7 +113,7 @@
             transition: opacity 0.5s;
         }
 
-        /* KART (FOTOĞRAF VE NOT) */
+        /* KART ALANI */
         .card-container {
             position: absolute;
             top: 10px;
@@ -132,12 +153,11 @@
             align-items: center;
         }
 
-        /* Kartın Ön Yüzü (Fotoğraf) */
+        /* Kartın Önü (resim1.jpg) */
         .card-front {
             background-color: #fff;
             color: black;
         }
-        /* DÜZELTME: yaso.jpg (küçük harf) */
         .card-front img {
             width: 90%;
             height: 80%;
@@ -151,10 +171,9 @@
             color: #c0392b;
         }
 
-        /* Kartın Arka Yüzü (Not) */
+        /* Kartın Arkası (Not) */
         .card-back {
-            /* Notun arkasında da sizin fotonuz flu şekilde görünsün */
-            background: linear-gradient(to bottom, rgba(10, 25, 60, 0.9), rgba(5, 10, 30, 0.95)), url('yaso.jpg');
+            background: linear-gradient(to bottom, rgba(10, 25, 60, 0.9), rgba(5, 10, 30, 0.95)), url('resim1.jpg');
             background-size: cover;
             background-position: center;
             color: #FFD700;
@@ -170,7 +189,7 @@
             font-family: 'Dancing Script', cursive;
         }
 
-        /* Tıklanınca Olacaklar (JavaScript Ekleyecek) */
+        /* Animasyonlar */
         .envelope.open .flap {
             transform: rotateX(180deg);
             z-index: 1;
@@ -183,7 +202,7 @@
             z-index: 6;
         }
 
-        /* İpucu Yazıları */
+        /* İpuçları */
         .hint-text {
             position: absolute;
             width: 100%;
@@ -194,23 +213,11 @@
             transition: opacity 0.5s;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
-        #envelopeHint {
-             bottom: -40px;
-             opacity: 1;
-             animation: bounce 2s infinite;
-        }
-        #cardHint {
-            bottom: -280px;
-        }
-
-        .envelope-wrapper.opened #envelopeHint {
-             opacity: 0;
-             animation: none;
-        }
-        .envelope-wrapper.opened #cardHint {
-             opacity: 1;
-             transition-delay: 1.8s;
-        }
+        #envelopeHint { bottom: -40px; opacity: 1; animation: bounce 2s infinite; }
+        #cardHint { bottom: -280px; }
+        
+        .envelope-wrapper.opened #envelopeHint { opacity: 0; animation: none; }
+        .envelope-wrapper.opened #cardHint { opacity: 1; transition-delay: 1.8s; }
 
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
@@ -225,17 +232,20 @@
         <source src="muzik.mp3" type="audio/mpeg">
     </audio>
 
+    <div class="music-control" onclick="toggleMusic()">
+        <span id="musicIcon">🎵</span> 
+        <span id="musicText">Müziği Aç</span>
+    </div>
+
     <div class="envelope-wrapper" id="mainWrapper">
-        
         <div class="envelope" id="envelope" onclick="openSurprise()">
             <div class="flap"></div>
             <div class="seal">❤️</div>
         </div>
-
         <div class="card-container" id="cardContainer">
             <div class="card" onclick="toggleCardFlip()">
                 <div class="card-front">
-                    <img src="yaso.jpg" alt="Biz">
+                    <img src="resim1.jpg" alt="Biz">
                     <h2>Halil & Yaso</h2>
                 </div>
                 <div class="card-back">
@@ -244,37 +254,27 @@
                 </div>
             </div>
         </div>
-
         <p class="hint-text" id="envelopeHint">Zarfa Tıkla Birtanem</p>
         <p class="hint-text" id="cardHint">Notu okumak için karta tıkla</p>
     </div>
-
 
     <script>
         const envelope = document.getElementById('envelope');
         const cardContainer = document.getElementById('cardContainer');
         const music = document.getElementById('bgMusic');
         const mainWrapper = document.getElementById('mainWrapper');
+        const musicText = document.getElementById('musicText');
+        const musicIcon = document.getElementById('musicIcon');
+        
         let isEnvelopeOpen = false;
+        let isMusicPlaying = false;
 
-        // 1. Sürprizi başlatan fonksiyon
         function openSurprise() {
             if (isEnvelopeOpen) return;
             isEnvelopeOpen = true;
 
-            // Müziği oynatmaya çalış
-            music.volume = 0.6;
-            var playPromise = music.play();
-
-            if (playPromise !== undefined) {
-                playPromise.then(_ => {
-                    // Otomatik oynatma başladı
-                })
-                .catch(error => {
-                    // Tarayıcı engelledi, önemli değil, görsel devam etsin.
-                    console.log("Müzik otomatik başlamadı (normal):", error);
-                });
-            }
+            // Zarfa tıklayınca müziği başlatmayı dene
+            playMusic();
 
             envelope.classList.add('open');
             mainWrapper.classList.add('opened');
@@ -284,14 +284,38 @@
             }, 800);
         }
 
-        // 2. Kartı döndüren fonksiyon
         function toggleCardFlip() {
             if (isEnvelopeOpen && cardContainer.classList.contains('pulled')) {
                  const card = document.querySelector('.card');
                  card.classList.toggle('is-flipped');
             }
         }
-    </script>
 
+        // Müzik kontrol fonksiyonu
+        function playMusic() {
+            music.volume = 0.6;
+            music.play().then(() => {
+                isMusicPlaying = true;
+                musicText.innerText = "Müzik Çalıyor";
+                musicIcon.innerText = "🔊";
+            }).catch(error => {
+                console.log("Otomatik müzik engellendi:", error);
+                isMusicPlaying = false;
+                musicText.innerText = "Müziği Başlat";
+            });
+        }
+
+        // Sağ üstteki butona tıklayınca
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                music.pause();
+                isMusicPlaying = false;
+                musicText.innerText = "Müziği Aç";
+                musicIcon.innerText = "🎵";
+            } else {
+                playMusic();
+            }
+        }
+    </script>
 </body>
 </html>
