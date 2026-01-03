@@ -13,10 +13,13 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            /* Arka planı biraz daha romantik yapalım */
-            background: linear-gradient(135deg, #2c3e50 0%, #bdc3c7 100%);
+            /* YENİ ARKA PLAN: resim1.jpg */
+            /* Üzerine koyu lacivert bir filtre attık ki zarf net görünsün */
+            background: linear-gradient(rgba(10, 25, 60, 0.8), rgba(10, 25, 60, 0.8)), url('resim1.jpg');
+            background-size: cover;
+            background-position: center;
             font-family: 'Segoe UI', sans-serif;
-            overflow: hidden; /* Taşmaları gizle */
+            overflow: hidden;
         }
 
         /* ZARF ALANI */
@@ -29,8 +32,8 @@
             position: relative;
             width: 300px;
             height: 200px;
-            background: #f7edd5; /* Kağıt rengi */
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            background: #f7edd5;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5); /* Gölgeyi belirginleştirdik */
             z-index: 2;
         }
 
@@ -83,7 +86,7 @@
             left: 50%;
             transform: translateX(-50%);
             font-size: 40px;
-            color: #c0392b; /* Kırmızı mühür rengi */
+            color: #c0392b;
             text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
             z-index: 5;
             transition: opacity 0.5s;
@@ -97,9 +100,9 @@
             transform: translateX(-50%);
             width: 260px;
             height: 350px;
-            perspective: 1000px; /* 3D efekti için */
-            z-index: 1; /* Zarfın içinde başlar */
-            transition: top 1s ease-in-out 0.8s; /* Zarf açıldıktan sonra çıkması için gecikme */
+            perspective: 1000px;
+            z-index: 1;
+            transition: top 1s ease-in-out 0.8s;
         }
 
         .card {
@@ -110,10 +113,10 @@
             transition: transform 0.8s;
             transform-style: preserve-3d;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            cursor: pointer;
         }
 
-        /* Kart dışarı çıktığında üzerine gelince dönsün */
-        .card-container.pulled:hover .card {
+        .card.is-flipped {
             transform: rotateY(180deg);
         }
 
@@ -121,7 +124,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            backface-visibility: hidden; /* Arka yüzü gizle */
+            backface-visibility: hidden;
             border-radius: 10px;
             display: flex;
             flex-direction: column;
@@ -134,6 +137,7 @@
             background-color: #fff;
             color: black;
         }
+        /* DÜZELTME: yaso.jpg (küçük harf) */
         .card-front img {
             width: 90%;
             height: 80%;
@@ -149,10 +153,12 @@
 
         /* Kartın Arka Yüzü (Not) */
         .card-back {
-            background: linear-gradient(to bottom, rgba(10, 25, 60, 0.9), rgba(5, 10, 30, 0.95)), url('Yaso.jpg');
+            /* Notun arkasında da sizin fotonuz flu şekilde görünsün */
+            background: linear-gradient(to bottom, rgba(10, 25, 60, 0.9), rgba(5, 10, 30, 0.95)), url('yaso.jpg');
             background-size: cover;
-            color: #FFD700; /* Altın rengi yazı */
-            transform: rotateY(180deg); /* Başlangıçta ters duracak */
+            background-position: center;
+            color: #FFD700;
+            transform: rotateY(180deg);
             padding: 20px;
             box-sizing: border-box;
         }
@@ -166,30 +172,44 @@
 
         /* Tıklanınca Olacaklar (JavaScript Ekleyecek) */
         .envelope.open .flap {
-            transform: rotateX(180deg); /* Kapak açılır */
+            transform: rotateX(180deg);
             z-index: 1;
         }
         .envelope.open .seal {
-            opacity: 0; /* Mühür kaybolur */
+            opacity: 0;
         }
         .card-container.pulled {
-            top: -250px; /* Kart yukarı çıkar */
-            z-index: 6; /* Zarfın önüne geçer */
+            top: -250px;
+            z-index: 6;
         }
 
-        .click-hint {
+        /* İpucu Yazıları */
+        .hint-text {
             position: absolute;
-            bottom: -40px;
             width: 100%;
             text-align: center;
             color: #fff;
-            font-size: 1.2rem;
-            animation: bounce 2s infinite;
-            opacity: 1;
-            transition: opacity 0.5s;
-        }
-        .click-hint.hidden {
+            font-size: 1.1rem;
             opacity: 0;
+            transition: opacity 0.5s;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        #envelopeHint {
+             bottom: -40px;
+             opacity: 1;
+             animation: bounce 2s infinite;
+        }
+        #cardHint {
+            bottom: -280px;
+        }
+
+        .envelope-wrapper.opened #envelopeHint {
+             opacity: 0;
+             animation: none;
+        }
+        .envelope-wrapper.opened #cardHint {
+             opacity: 1;
+             transition-delay: 1.8s;
         }
 
         @keyframes bounce {
@@ -203,19 +223,19 @@
 
     <audio id="bgMusic" loop>
         <source src="muzik.mp3" type="audio/mpeg">
-        Tarayıcınız bu ses dosyasını desteklemiyor.
     </audio>
 
-    <div class="envelope-wrapper" onclick="openSurprise()">
-        <div class="envelope" id="envelope">
+    <div class="envelope-wrapper" id="mainWrapper">
+        
+        <div class="envelope" id="envelope" onclick="openSurprise()">
             <div class="flap"></div>
             <div class="seal">❤️</div>
         </div>
 
         <div class="card-container" id="cardContainer">
-            <div class="card">
+            <div class="card" onclick="toggleCardFlip()">
                 <div class="card-front">
-                    <img src="Yaso.jpg" alt="Biz">
+                    <img src="yaso.jpg" alt="Biz">
                     <h2>Halil & Yaso</h2>
                 </div>
                 <div class="card-back">
@@ -224,34 +244,52 @@
                 </div>
             </div>
         </div>
-        <p class="click-hint" id="hint">Zarfa Tıkla Birtanem</p>
+
+        <p class="hint-text" id="envelopeHint">Zarfa Tıkla Birtanem</p>
+        <p class="hint-text" id="cardHint">Notu okumak için karta tıkla</p>
     </div>
 
 
     <script>
-        // Sürprizi başlatan fonksiyon
+        const envelope = document.getElementById('envelope');
+        const cardContainer = document.getElementById('cardContainer');
+        const music = document.getElementById('bgMusic');
+        const mainWrapper = document.getElementById('mainWrapper');
+        let isEnvelopeOpen = false;
+
+        // 1. Sürprizi başlatan fonksiyon
         function openSurprise() {
-            const envelope = document.getElementById('envelope');
-            const cardContainer = document.getElementById('cardContainer');
-            const music = document.getElementById('bgMusic');
-            const hint = document.getElementById('hint');
+            if (isEnvelopeOpen) return;
+            isEnvelopeOpen = true;
 
-            // Eğer zaten açılmışsa tekrar tetikleme
-            if (envelope.classList.contains('open')) return;
-
-            // Müziği başlat (Sesi biraz kısık başlatalım, %60 iyidir)
+            // Müziği oynatmaya çalış
             music.volume = 0.6;
-            music.play();
+            var playPromise = music.play();
 
-            // Zarfi aç ve ipucunu gizle
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    // Otomatik oynatma başladı
+                })
+                .catch(error => {
+                    // Tarayıcı engelledi, önemli değil, görsel devam etsin.
+                    console.log("Müzik otomatik başlamadı (normal):", error);
+                });
+            }
+
             envelope.classList.add('open');
-            hint.classList.add('hidden');
+            mainWrapper.classList.add('opened');
 
-            // Zarf açıldıktan 0.8 saniye sonra kartı yukarı çek
-            // (Bu süre CSS'deki transition süresiyle uyumlu)
             setTimeout(() => {
                 cardContainer.classList.add('pulled');
             }, 800);
+        }
+
+        // 2. Kartı döndüren fonksiyon
+        function toggleCardFlip() {
+            if (isEnvelopeOpen && cardContainer.classList.contains('pulled')) {
+                 const card = document.querySelector('.card');
+                 card.classList.toggle('is-flipped');
+            }
         }
     </script>
 
