@@ -21,7 +21,7 @@
             overflow: hidden;
         }
 
-        /* MÜZİK KONTROL BUTONU (GARANTİ İÇİN) */
+        /* MÜZİK KONTROL BUTONU (GARANTİ) */
         .music-control {
             position: absolute;
             top: 20px;
@@ -229,7 +229,7 @@
 <body>
 
     <audio id="bgMusic" loop>
-        <source src="muzik.mp3" type="audio/mpeg">
+        <source src="müzik.mp3" type="audio/mpeg">
     </audio>
 
     <div class="music-control" onclick="toggleMusic()">
@@ -294,6 +294,7 @@
         // Müzik kontrol fonksiyonu
         function playMusic() {
             music.volume = 0.6;
+            // Müzik çalmaya çalış
             music.play().then(() => {
                 isMusicPlaying = true;
                 musicText.innerText = "Müzik Çalıyor";
