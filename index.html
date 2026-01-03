@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sürpriz!</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+            text-align: center;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            animation: fadeIn 2s ease-in;
+        }
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        p {
+            font-size: 1.5rem;
+            margin-top: 0;
+        }
+        .heart {
+            font-size: 5rem;
+            color: #ff4b4b;
+            animation: heartbeat 1.2s infinite;
+            margin-top: 20px;
+            display: block;
+        }
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.3); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.3); }
+            70% { transform: scale(1); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>İbrahim ❤️ Yaso</h1>
+        <p>Seni Çok Seviyorum!</p>
+        <span class="heart">❤️</span>
+    </div>
+
+</body>
+</html>
